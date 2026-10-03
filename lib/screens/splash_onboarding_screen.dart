@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../widgets/contour_leaf_painter.dart';
-import 'main_shell_screen.dart';
+import 'email_auth_screen.dart';
+import 'tutorial_screen.dart';
 
 class SplashOnboardingScreen extends StatelessWidget {
   const SplashOnboardingScreen({super.key});
@@ -149,9 +150,9 @@ class SplashOnboardingScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.of(context).pushReplacement(
+                            Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (_) => const MainShellScreen(),
+                                builder: (_) => const TutorialScreen(),
                               ),
                             );
                           },
@@ -167,9 +168,9 @@ class SplashOnboardingScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pushReplacement(
+                          Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => const MainShellScreen(),
+                              builder: (_) => const EmailAuthScreen(),
                             ),
                           );
                         },

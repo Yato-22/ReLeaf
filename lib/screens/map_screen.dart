@@ -3,11 +3,13 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
+import '../services/mock_data_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../widgets/status_badge.dart';
 import '../widgets/telemetry_strip.dart';
 import 'location_detail_screen.dart';
+import 'map_filter_sheet.dart';
 
 class MapScreen extends StatefulWidget {
   final VoidCallback? onNavigateToDrives;
@@ -20,9 +22,35 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   String _selectedMetric = 'Priority';
-  PlotLocation _selectedLocation = ReLeafData.defaultLocation;
+  late PlotLocation _selectedLocation;
+  List<PlotLocation> _locations = [];
 
-  final List<PlotLocation> _locations = ReLeafData.mapLocations;
+  @override
+  void initState() {
+    super.initState();
+    _refreshLocations();
+  }
+
+  void _refreshLocations() {
+    final areas = MockDataService().filteredAreas;
+    _locations = areas.isNotEmpty ? areas : ReLeafData.mapLocations;
+    _selectedLocation = _locations.first;
+  }
+
+  void _openFilterSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => MapFilterSheet(
+        onFiltersApplied: () {
+          setState(() {
+            _refreshLocations();
+          });
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,16 +102,7 @@ class _MapScreenState extends State<MapScreen> {
                 size: 20,
               ),
               tooltip: 'Filters and configuration',
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Field GIS Filters: Showing active catchment telemetry',
-                    ),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              },
+              onPressed: _openFilterSheet,
             ),
             const SizedBox(width: 8),
           ],

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
+import '../services/mock_data_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../widgets/telemetry_strip.dart';
+import 'join_confirmation_screen.dart';
+import 'location_detail_screen.dart';
+import 'manage_drive_screen.dart';
 
 class DriveDetailScreen extends StatefulWidget {
   final RestorationDrive drive;
@@ -56,11 +60,14 @@ class _DriveDetailScreenState extends State<DriveDetailScreen> {
 
                               Row(
                                 children: [
-                                  Text(
-                                    drive.ngoName,
-                                    style: AppTypography.labelLg.copyWith(
-                                      color: AppColors.secondarySage,
-                                      fontWeight: FontWeight.w600,
+                                  Flexible(
+                                    child: Text(
+                                      drive.ngoName,
+                                      style: AppTypography.labelLg.copyWith(
+                                        color: AppColors.secondarySage,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                   if (drive.isNgoVerified) ...[
@@ -114,13 +121,17 @@ class _DriveDetailScreenState extends State<DriveDetailScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'COHORT RECRUITMENT',
-                                    style: AppTypography.labelMd.copyWith(
-                                      color: AppColors.outline,
-                                      fontWeight: FontWeight.bold,
+                                  Expanded(
+                                    child: Text(
+                                      'COHORT RECRUITMENT',
+                                      style: AppTypography.labelMd.copyWith(
+                                        color: AppColors.outline,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
+                                  const SizedBox(width: 8),
                                   Text(
                                     '${((drive.volunteersRegistered + (_isJoined ? 1 : 0)) / drive.volunteersCapacity * 100).round()}% Filled',
                                     style: AppTypography.labelMd.copyWith(
@@ -206,53 +217,96 @@ class _DriveDetailScreenState extends State<DriveDetailScreen> {
               child: Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 580),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 44,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _isJoined
-                            ? AppColors.secondarySage
-                            : AppColors.primaryContainer,
-                        foregroundColor: AppColors.onPrimary,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (MockDataService().userProfile.isNgo) ...[
+                        SizedBox(
+                          width: double.infinity,
+                          height: 42,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                color: AppColors.primaryContainer,
+                                width: 1.5,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => ManageDriveScreen(drive: drive),
+                                ),
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.manage_accounts, size: 18),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Manage Volunteer Roster',
+                                  style: AppTypography.labelLg.copyWith(
+                                    color: AppColors.primaryContainer,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                      SizedBox(
+                        width: double.infinity,
+                        height: 44,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _isJoined
+                                ? AppColors.secondarySage
+                                : AppColors.primaryContainer,
+                            foregroundColor: AppColors.onPrimary,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                          onPressed: () {
+                            if (!_isJoined) {
+                              MockDataService().joinDrive(drive.id);
+                              setState(() => _isJoined = true);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      JoinConfirmationScreen(drive: drive),
+                                ),
+                              );
+                            } else {
+                              setState(() => _isJoined = false);
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                _isJoined ? Icons.check : Icons.forest,
+                                size: 18,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                _isJoined ? 'Registered (View Pass)' : 'Join Drive',
+                                style: AppTypography.labelLg.copyWith(
+                                  color: AppColors.onPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _isJoined = !_isJoined;
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              _isJoined
-                                  ? 'Registered for ${drive.title}! Check-in coordinates sent.'
-                                  : 'Registration cancelled.',
-                            ),
-                            duration: const Duration(seconds: 2),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            _isJoined ? Icons.check : Icons.forest,
-                            size: 18,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            _isJoined ? 'Registered' : 'Join Drive',
-                            style: AppTypography.labelLg.copyWith(
-                              color: AppColors.onPrimary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    ],
                   ),
                 ),
               ),
@@ -356,21 +410,29 @@ class _DriveDetailScreenState extends State<DriveDetailScreen> {
         children: [
           Icon(icon, size: 18, color: AppColors.secondarySage),
           const SizedBox(height: 6),
-          Text(
-            value,
-            style: AppTypography.headlineSm.copyWith(
-              color: AppColors.onSurface,
-              fontWeight: FontWeight.bold,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              value,
+              style: AppTypography.headlineSm.copyWith(
+                color: AppColors.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
+              maxLines: 1,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 2),
-          Text(
-            label,
-            style: AppTypography.labelMd.copyWith(
-              color: AppColors.outline,
-              fontSize: 10,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              label,
+              style: AppTypography.labelMd.copyWith(
+                color: AppColors.outline,
+                fontSize: 10,
+              ),
+              maxLines: 1,
             ),
           ),
         ],
@@ -379,77 +441,130 @@ class _DriveDetailScreenState extends State<DriveDetailScreen> {
   }
 
   Widget _buildRationaleCard(RestorationDrive drive) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainer,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.surfaceContainerHigh, width: 1),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.analytics_outlined,
-                    size: 18,
-                    color: AppColors.secondarySage,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    'Priority Score: ${drive.priorityScore}',
-                    style: AppTypography.headlineSm.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(
-                    color: AppColors.tertiaryContainer,
-                    width: 1,
-                  ),
-                ),
-                child: Text(
-                  drive.priorityLevel.toUpperCase(),
-                  style: AppTypography.labelMd.copyWith(
-                    color: AppColors.tertiary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          const Divider(color: AppColors.surfaceContainerHigh, height: 1),
-          const SizedBox(height: 10),
+    final area = MockDataService().getAreaById(drive.linkedAreaId) ??
+        ReLeafData.defaultLocation;
 
-          Text(
-            'RECOMMENDED INTERVENTION',
-            style: AppTypography.labelMd.copyWith(
-              color: AppColors.secondarySage,
-              fontWeight: FontWeight.bold,
-              fontSize: 10,
-            ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => LocationDetailScreen(location: area),
           ),
-          const SizedBox(height: 4),
-          Text(
-            drive.recommendedIntervention,
-            style: AppTypography.bodyMd.copyWith(
-              color: AppColors.onSurfaceVariant,
-              height: 1.4,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppColors.surfaceContainerHigh, width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.analytics_outlined,
+                        size: 18,
+                        color: AppColors.secondarySage,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          '${area.shortName} • Score: ${drive.priorityScore}',
+                          style: AppTypography.headlineSm.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceContainerLowest,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                          color: AppColors.tertiaryContainer,
+                          width: 1,
+                        ),
+                      ),
+                      child: Text(
+                        drive.priorityLevel.toUpperCase(),
+                        style: AppTypography.labelMd.copyWith(
+                          color: AppColors.tertiary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(
+                      Icons.chevron_right,
+                      size: 18,
+                      color: AppColors.outline,
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            const Divider(color: AppColors.surfaceContainerHigh, height: 1),
+            const SizedBox(height: 10),
+
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'RECOMMENDED INTERVENTION',
+                    style: AppTypography.labelMd.copyWith(
+                      color: AppColors.secondarySage,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    'Satellite timelapse →',
+                    style: AppTypography.labelMd.copyWith(
+                      color: AppColors.primaryContainer,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              drive.recommendedIntervention,
+              style: AppTypography.bodyMd.copyWith(
+                color: AppColors.onSurfaceVariant,
+                height: 1.4,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

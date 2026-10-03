@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
+import '../services/mock_data_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../widgets/telemetry_strip.dart';
+import 'create_drive_screen.dart';
 import 'drive_detail_screen.dart';
 
 class RestorationDrivesScreen extends StatefulWidget {
-  const RestorationDrivesScreen({super.key});
+  final String? filterAreaId;
+
+  const RestorationDrivesScreen({super.key, this.filterAreaId});
 
   @override
   State<RestorationDrivesScreen> createState() =>
@@ -16,12 +20,44 @@ class RestorationDrivesScreen extends StatefulWidget {
 
 class _RestorationDrivesScreenState extends State<RestorationDrivesScreen> {
   String _selectedFilter = 'Near me';
-  final List<RestorationDrive> _drives = ReLeafData.drives;
+  String? _activeAreaFilter;
+
+  @override
+  void initState() {
+    super.initState();
+    _activeAreaFilter = widget.filterAreaId;
+  }
+
+  List<RestorationDrive> get _drives {
+    var list = MockDataService().allDrives;
+    if (_activeAreaFilter != null) {
+      list = list.where((d) => d.linkedAreaId == _activeAreaFilter).toList();
+    }
+    if (_selectedFilter == 'High priority areas') {
+      list = list.where((d) => d.priorityScore > 70).toList();
+    }
+    return list;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isNgo = MockDataService().userProfile.isNgo;
+
     return Scaffold(
       backgroundColor: AppColors.background,
+      floatingActionButton: isNgo
+          ? FloatingActionButton.extended(
+              backgroundColor: AppColors.primaryContainer,
+              foregroundColor: AppColors.onPrimary,
+              icon: const Icon(Icons.add),
+              label: const Text('Create Drive'),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const CreateDriveScreen()),
+                ).then((_) => setState(() {}));
+              },
+            )
+          : null,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56),
         child: AppBar(
@@ -34,6 +70,16 @@ class _RestorationDrivesScreenState extends State<RestorationDrivesScreen> {
             ),
           ),
           actions: [
+            if (isNgo)
+              IconButton(
+                icon: const Icon(Icons.add_circle_outline, color: AppColors.primaryContainer),
+                tooltip: 'Create New Drive',
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const CreateDriveScreen()),
+                  ).then((_) => setState(() {}));
+                },
+              ),
             IconButton(
               icon: const Icon(Icons.tune, color: AppColors.outline, size: 20),
               tooltip: 'Filter drives',
@@ -54,6 +100,37 @@ class _RestorationDrivesScreenState extends State<RestorationDrivesScreen> {
       body: SafeArea(
         child: Column(
           children: [
+            if (_activeAreaFilter != null) ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                color: AppColors.primaryContainer.withValues(alpha: 0.1),
+                child: Row(
+                  children: [
+                    const Icon(Icons.location_on, size: 16, color: AppColors.primaryContainer),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Filtered to: ${MockDataService().getAreaById(_activeAreaFilter!)?.name ?? _activeAreaFilter}',
+                        style: AppTypography.labelMd.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryContainer,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 16, color: AppColors.primaryContainer),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      onPressed: () {
+                        setState(() => _activeAreaFilter = null);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+
             // Horizontal Filter Chips Strip
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

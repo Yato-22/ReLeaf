@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
+import '../services/mock_data_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
+import 'create_drive_screen.dart';
+import 'edit_profile_screen.dart';
+import 'impact_detail_screen.dart';
+import 'manage_drive_screen.dart';
+import 'notifications_screen.dart';
+import 'settings_screen.dart';
 import 'splash_onboarding_screen.dart';
 
-class UserProfileScreen extends StatelessWidget {
+class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
 
   @override
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  @override
   Widget build(BuildContext context) {
-    const user = ReLeafData.currentUser;
+    final user = MockDataService().userProfile;
+    final isNgo = user.isNgo;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -18,26 +31,66 @@ class UserProfileScreen extends StatelessWidget {
         preferredSize: const Size.fromHeight(56),
         child: AppBar(
           backgroundColor: AppColors.surface,
-          title: Row(
-            children: [
-              const Icon(Icons.eco, color: AppColors.primary, size: 22),
-              const SizedBox(width: 8),
-              Text(
-                'ReLeaf',
-                style: AppTypography.headlineSm.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.bold,
+          title: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.eco, color: AppColors.primary, size: 22),
+                const SizedBox(width: 8),
+                Text(
+                  'ReLeaf',
+                  style: AppTypography.headlineSm.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: isNgo
+                        ? AppColors.primaryContainer.withValues(alpha: 0.12)
+                        : AppColors.secondarySage.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    isNgo ? 'NGO PORTAL' : 'FIELD STEWARD',
+                    style: AppTypography.labelMd.copyWith(
+                      color: isNgo
+                          ? AppColors.primaryContainer
+                          : AppColors.secondarySage,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 9,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: [
+            // Notifications Icon
             IconButton(
-              icon: const Icon(Icons.tune, color: AppColors.primary, size: 20),
-              tooltip: 'Settings and Tuning',
+              icon: const Icon(
+                Icons.notifications_none,
+                color: AppColors.primary,
+                size: 20,
+              ),
+              tooltip: 'Notifications',
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Field volunteer preferences')),
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                );
+              },
+            ),
+            // Settings Icon
+            IconButton(
+              icon: const Icon(Icons.settings_outlined, color: AppColors.primary, size: 20),
+              tooltip: 'Settings and Preferences',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
                 );
               },
             ),
@@ -54,7 +107,7 @@ class UserProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 1. User Bio & Avatar
+                  // 1. User Bio & Avatar (Screen 16 & link to 17)
                   _buildBioSection(context, user),
 
                   const SizedBox(height: 24),
@@ -64,10 +117,16 @@ class UserProfileScreen extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  // 3. "Your Impact" Section
-                  _buildImpactCard(user),
+                  // 3. "Your Impact" Section (clickable -> Screen 18 Impact Detail)
+                  _buildImpactCard(context, user),
 
                   const SizedBox(height: 24),
+
+                  // NGO Quick Actions (if NGO user role)
+                  if (isNgo) ...[
+                    _buildNgoActionsSection(context),
+                    const SizedBox(height: 24),
+                  ],
 
                   // 4. "Drive History" Section
                   _buildHistorySection(user),
@@ -132,24 +191,39 @@ class UserProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                user.role,
+                user.roleLabel,
                 style: AppTypography.bodySm.copyWith(
                   color: AppColors.secondarySage,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               InkWell(
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Edit Profile modal')),
-                  );
+                  Navigator.of(context)
+                      .push(
+                        MaterialPageRoute(
+                          builder: (_) => const EditProfileScreen(),
+                        ),
+                      )
+                      .then((_) => setState(() {}));
                 },
-                child: Text(
-                  'Edit Profile',
-                  style: AppTypography.labelMd.copyWith(
-                    color: AppColors.secondarySage,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.edit_outlined,
+                      size: 14,
+                      color: AppColors.primaryContainer,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Edit Profile',
+                      style: AppTypography.labelMd.copyWith(
+                        color: AppColors.primaryContainer,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -190,7 +264,7 @@ class UserProfileScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainer,
+        color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.outlineVariant, width: 1),
       ),
@@ -198,12 +272,16 @@ class UserProfileScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            stat,
-            style: AppTypography.headlineXl.copyWith(
-              color: AppColors.primaryContainer,
-              fontWeight: FontWeight.bold,
-              fontSize: 28,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              stat,
+              style: AppTypography.headlineXl.copyWith(
+                color: AppColors.primaryContainer,
+                fontWeight: FontWeight.bold,
+                fontSize: 26,
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -214,93 +292,245 @@ class UserProfileScreen extends StatelessWidget {
               fontSize: 10,
               fontWeight: FontWeight.bold,
             ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildImpactCard(UserProfile user) {
+  Widget _buildImpactCard(BuildContext context, UserProfile user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'YOUR IMPACT',
-              style: AppTypography.labelMd.copyWith(
-                color: AppColors.secondarySage,
-                fontWeight: FontWeight.bold,
+            Flexible(
+              child: Text(
+                'YOUR IMPACT',
+                style: AppTypography.labelMd.copyWith(
+                  color: AppColors.secondarySage,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-            Text(
-              'Q3 Baseline',
-              style: AppTypography.labelMd.copyWith(color: AppColors.outline),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                'Sentinel-2 Telemetry',
+                style: AppTypography.labelMd.copyWith(color: AppColors.outline),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.primaryContainer,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.primaryContainer, width: 1),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Text(
-                    user.canopyDelta,
-                    style: AppTypography.headlineXl.copyWith(
-                      color: AppColors.tertiaryContainer,
-                      fontWeight: FontWeight.bold,
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const ImpactDetailScreen()),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.primaryContainer,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.primaryContainer, width: 1),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text(
+                            user.canopyDelta,
+                            style: AppTypography.headlineXl.copyWith(
+                              color: AppColors.tertiaryContainer,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              'CANOPY DELTA',
+                              style: AppTypography.labelMd.copyWith(
+                                color: AppColors.onPrimaryContainer,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'CANOPY DELTA',
-                    style: AppTypography.labelMd.copyWith(
-                      color: AppColors.onPrimaryContainer,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(width: 8),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white70,
+                      size: 14,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                user.canopySubtext,
-                style: AppTypography.bodySm.copyWith(color: AppColors.surface),
-              ),
-              const SizedBox(height: 16),
-              const Divider(color: Color(0x4D3F665C), height: 1),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.satellite_alt,
-                    size: 16,
-                    color: AppColors.secondaryFixed,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    user.verificationBadge,
-                    style: AppTypography.labelMd.copyWith(
-                      color: AppColors.secondaryFixed,
-                      fontWeight: FontWeight.w600,
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  user.canopySubtext,
+                  style: AppTypography.bodySm.copyWith(color: AppColors.surface),
+                ),
+                const SizedBox(height: 14),
+                const Divider(color: Color(0x4D3F665C), height: 1),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.satellite_alt,
+                            size: 16,
+                            color: AppColors.secondaryFixed,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              user.verificationBadge,
+                              style: AppTypography.labelMd.copyWith(
+                                color: AppColors.secondaryFixed,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(width: 8),
+                    Text(
+                      'View Proof →',
+                      style: AppTypography.labelMd.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildNgoActionsSection(BuildContext context) {
+    final drives = MockDataService().allDrives;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.outlineVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  'ORGANIZED RESTORATION PARCELS',
+                  style: AppTypography.labelMd.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.secondarySage,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'NGO Dashboard',
+                style: AppTypography.labelMd.copyWith(
+                  color: AppColors.outline,
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryContainer,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 8,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  icon: const Icon(Icons.add, size: 16),
+                  label: const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text('Create Drive'),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const CreateDriveScreen(),
+                      ),
+                    ).then((_) => setState(() {}));
+                  },
+                ),
+              ),
+              if (drives.isNotEmpty) ...[
+                const SizedBox(width: 10),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 8,
+                      ),
+                      side: const BorderSide(color: AppColors.primaryContainer),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    icon: const Icon(Icons.people_outline, size: 16),
+                    label: const FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text('Manage Roster'),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ManageDriveScreen(drive: drives.first),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -308,132 +538,152 @@ class UserProfileScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Drive History',
-              style: AppTypography.headlineSm.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.onSurface,
-              ),
-            ),
-            Text(
-              '${user.history.length} Completed',
-              style: AppTypography.labelMd.copyWith(
-                color: AppColors.secondarySage,
-              ),
-            ),
-          ],
+        Text(
+          'DRIVE HISTORY (${user.history.length})',
+          style: AppTypography.labelMd.copyWith(
+            color: AppColors.secondarySage,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        const SizedBox(height: 10),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: user.history.length,
-          separatorBuilder: (_, _) => const SizedBox(height: 8),
-          itemBuilder: (context, index) {
-            final item = user.history[index];
-            return Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.outlineVariant, width: 1),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.outlineVariant, width: 1),
+          ),
+          child: Column(
+            children: List.generate(user.history.length, (index) {
+              final drive = user.history[index];
+              final isLast = index == user.history.length - 1;
+              return Column(
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          item.title,
-                          style: AppTypography.bodyMd.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.onSurface,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                drive.title,
+                                style: AppTypography.bodyMd.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.onSurface,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                '${drive.date} • ${drive.plants} saplings • ${drive.hours} hrs',
+                                style: AppTypography.bodySm.copyWith(
+                                  color: AppColors.secondarySage,
+                                  fontSize: 11,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          item.date,
-                          style: AppTypography.bodySm.copyWith(
-                            color: AppColors.secondarySage,
+                        const SizedBox(width: 10),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryContainer.withValues(
+                              alpha: 0.1,
+                            ),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            'VERIFIED',
+                            style: AppTypography.labelMd.copyWith(
+                              color: AppColors.primaryContainer,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 9,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceContainer,
-                      borderRadius: BorderRadius.circular(4),
+                  if (!isLast)
+                    const Divider(
+                      height: 1,
+                      color: AppColors.outlineVariant,
                     ),
-                    child: const Icon(
-                      Icons.check_circle,
-                      size: 16,
-                      color: AppColors.primaryContainer,
-                    ),
-                  ),
                 ],
-              ),
-            );
-          },
+              );
+            }),
+          ),
         ),
       ],
     );
   }
 
   Widget _buildAccountActions(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (dialogCtx) => AlertDialog(
-            title: const Text('Log Out'),
-            content: const Text(
-              'Are you sure you want to log out of your field session?',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(dialogCtx).pop(),
-                child: const Text('Cancel'),
+    return SizedBox(
+      width: double.infinity,
+      height: 44,
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: AppColors.outlineVariant, width: 1),
+          foregroundColor: AppColors.alertDegraded,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        ),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              backgroundColor: AppColors.surfaceContainerLowest,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryContainer,
+              title: const Text('Log Out of ReLeaf?'),
+              content: const Text(
+                'You will need to request a one-time email passcode to log back in.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('Cancel'),
                 ),
-                onPressed: () {
-                  Navigator.of(dialogCtx).pop();
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (_) => const SplashOnboardingScreen(),
-                    ),
-                    (route) => false,
-                  );
-                },
-                child: const Text('Log Out'),
-              ),
-            ],
-          ),
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.alertDegraded,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    MockDataService().logout();
+                    Navigator.of(ctx).pop();
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (_) => const SplashOnboardingScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  },
+                  child: const Text('Log Out'),
+                ),
+              ],
+            ),
+          );
+        },
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.logout, size: 18, color: AppColors.outline),
+            const Icon(Icons.logout, size: 16),
             const SizedBox(width: 8),
             Text(
               'Log Out',
-              style: AppTypography.bodyMd.copyWith(
-                color: AppColors.outline,
-                fontWeight: FontWeight.w500,
+              style: AppTypography.labelLg.copyWith(
+                color: AppColors.alertDegraded,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],

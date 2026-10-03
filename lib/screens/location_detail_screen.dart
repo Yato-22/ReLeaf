@@ -4,6 +4,7 @@ import '../models/models.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../widgets/telemetry_strip.dart';
+import 'methodology_screen.dart';
 import 'restoration_drives_screen.dart';
 
 class LocationDetailScreen extends StatelessWidget {
@@ -31,6 +32,18 @@ class LocationDetailScreen extends StatelessWidget {
             ),
             onPressed: () => Navigator.of(context).pop(),
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info_outline, color: AppColors.primaryContainer),
+              tooltip: 'Biophysical Methodology',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MethodologyScreen()),
+                );
+              },
+            ),
+            const SizedBox(width: 8),
+          ],
           titleSpacing: 0,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +140,9 @@ class LocationDetailScreen extends StatelessWidget {
                         } else {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => const RestorationDrivesScreen(),
+                              builder: (_) => RestorationDrivesScreen(
+                                filterAreaId: location.id,
+                              ),
                             ),
                           );
                         }

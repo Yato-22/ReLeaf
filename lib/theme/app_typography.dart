@@ -29,11 +29,43 @@ abstract final class AppTypography {
     color: AppColors.onSurface,
   );
 
+  static TextStyle get headlineMd => GoogleFonts.hankenGrotesk(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    height: 26 / 20,
+    letterSpacing: -0.01 * 20,
+    color: AppColors.onSurface,
+  );
+
   static TextStyle get headlineSm => GoogleFonts.hankenGrotesk(
     fontSize: 18,
     fontWeight: FontWeight.w600,
     height: 24 / 18,
     letterSpacing: -0.01 * 18,
+    color: AppColors.onSurface,
+  );
+
+  static TextStyle get titleLg => GoogleFonts.hankenGrotesk(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    height: 24 / 18,
+    letterSpacing: -0.01 * 18,
+    color: AppColors.onSurface,
+  );
+
+  static TextStyle get titleMd => GoogleFonts.hankenGrotesk(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    height: 22 / 16,
+    letterSpacing: -0.01 * 16,
+    color: AppColors.onSurface,
+  );
+
+  static TextStyle get titleSm => GoogleFonts.hankenGrotesk(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    height: 20 / 14,
+    letterSpacing: 0,
     color: AppColors.onSurface,
   );
 

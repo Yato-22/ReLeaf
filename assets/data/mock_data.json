@@ -1,0 +1,365 @@
+{
+  "areas": [
+    {
+      "id": "mulshi-watershed",
+      "name": "Mulshi Watershed, Western Ghats",
+      "shortName": "Mulshi Basin",
+      "sector": "SECTOR 18-B • MONITORED PLOT",
+      "priorityScore": 87,
+      "tier": "high",
+      "statusLabel": "Degraded • Priority Flag",
+      "ndviChange": "-21%",
+      "slope": "32°",
+      "runoff": "Critical",
+      "rainfallAnomaly": "-16%",
+      "forestCoverChange": "-12%",
+      "topsoilLossRate": "4.2 t/ha/yr",
+      "ndviDeltaText": "NDVI 0.68 → 0.47",
+      "recommendedActionTitle": "Erosion Control + Native Vegetation Restoration",
+      "recommendedActionDesc": "Contour stone bunding paired with native broadleaf sapling plantation to halt gully progression.",
+      "description": "Zone classified under Tier-1 critically degraded catchment. Accelerated seasonal gully runoff requires rapid ecological stabilization.",
+      "interventionType": "Erosion Control",
+      "relativeX": 0.48,
+      "relativeY": 0.38,
+      "distanceKm": 14,
+      "beforeImageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuA5Yv5u3uunLvW66r0BBMXHuddswHnLzLabq2eslC_RSdJZVa3B6pTr5zG7XwTgkNvsVsBeopNgRTiC6ltDaulTgw-NWyzaWLTP1zuBxTclfd3kuoF3mg-3vHBdcG4iH7a9NtPxhoWpdIPlSXiKnt2-CORW10HL8JSZloTr8h7ldADqpKR8AVj59KqP_peRV3Lc8E3hBukMU0uhezPf2cghTgMdmnmD4OFlNLbuOEL92y_xM-LsNNJLyw",
+      "afterImageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuBit5tAUs2gYg_OHF_OR4A1w71wcGccVkwNa0RkXH2BFH8j5M5v9bdV7BBTDCazo-3wG8pLsCryxq9wVO2pfu2jX1Nbqu0UuNIk7y30lF0UQ7d2ilXogAb9fmtitN1lw-txzbwvn0dvNAACrJxKNPAuNsilR7348IMn4Mh3l94HypVx83PygFwKhk8ZQEC1AN-CS18mFaRLhpGMFOMG2je02nMnvG2qrqt2M5XdOOBkvcSDzjkET4Wz3g",
+      "scoreFactors": [
+        {
+          "name": "Canopy Density Loss (ΔNDVI)",
+          "value": "-21%",
+          "severity": "high",
+          "description": "Optical reflectance shows steady degradation of native broadleaf cover across 45 hectares."
+        },
+        {
+          "name": "Slope & Runoff Incline",
+          "value": "32° / Critical",
+          "severity": "high",
+          "description": "Steep volcanic basalt gradient accelerates torrential monsoon sheetwash into the reservoir."
+        },
+        {
+          "name": "Topsoil Erosion Rate",
+          "value": "4.2 t/ha/yr",
+          "severity": "high",
+          "description": "Active rill and gully formation stripping fertile humus layer."
+        },
+        {
+          "name": "Monsoon Precipitation Deficit",
+          "value": "-16%",
+          "severity": "medium",
+          "description": "Sub-surface aquifers under-recharged leading to prolonged dry-season stress."
+        }
+      ]
+    },
+    {
+      "id": "varasgaon-ridge",
+      "name": "Varasgaon Ridge Catchment",
+      "shortName": "Varasgaon Ridge",
+      "sector": "SECTOR 12-C • BUFFER ZONE",
+      "priorityScore": 58,
+      "tier": "medium",
+      "statusLabel": "Moderate Degradation",
+      "ndviChange": "-11%",
+      "slope": "22°",
+      "runoff": "Moderate",
+      "rainfallAnomaly": "-8%",
+      "forestCoverChange": "-6%",
+      "topsoilLossRate": "2.1 t/ha/yr",
+      "ndviDeltaText": "NDVI 0.61 → 0.54",
+      "recommendedActionTitle": "Assisted Natural Regeneration",
+      "recommendedActionDesc": "Brushwood dams and enrichment planting along drainage lines.",
+      "description": "Buffer zone showing early signs of canopy thinning along exposed ridges.",
+      "interventionType": "Assisted Natural Regeneration",
+      "relativeX": 0.24,
+      "relativeY": 0.22,
+      "distanceKm": 28,
+      "beforeImageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuA5Yv5u3uunLvW66r0BBMXHuddswHnLzLabq2eslC_RSdJZVa3B6pTr5zG7XwTgkNvsVsBeopNgRTiC6ltDaulTgw-NWyzaWLTP1zuBxTclfd3kuoF3mg-3vHBdcG4iH7a9NtPxhoWpdIPlSXiKnt2-CORW10HL8JSZloTr8h7ldADqpKR8AVj59KqP_peRV3Lc8E3hBukMU0uhezPf2cghTgMdmnmD4OFlNLbuOEL92y_xM-LsNNJLyw",
+      "afterImageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuBit5tAUs2gYg_OHF_OR4A1w71wcGccVkwNa0RkXH2BFH8j5M5v9bdV7BBTDCazo-3wG8pLsCryxq9wVO2pfu2jX1Nbqu0UuNIk7y30lF0UQ7d2ilXogAb9fmtitN1lw-txzbwvn0dvNAACrJxKNPAuNsilR7348IMn4Mh3l94HypVx83PygFwKhk8ZQEC1AN-CS18mFaRLhpGMFOMG2je02nMnvG2qrqt2M5XdOOBkvcSDzjkET4Wz3g",
+      "scoreFactors": [
+        {
+          "name": "Canopy Density Loss (ΔNDVI)",
+          "value": "-11%",
+          "severity": "medium",
+          "description": "Moderate crown thinning noted along windward ridge slopes."
+        },
+        {
+          "name": "Topsoil Erosion Rate",
+          "value": "2.1 t/ha/yr",
+          "severity": "medium",
+          "description": "Localized rills forming near seasonal livestock grazing tracks."
+        }
+      ]
+    },
+    {
+      "id": "tamhini-north",
+      "name": "Tamhini North Wildlife Sanctuary",
+      "shortName": "Tamhini North",
+      "sector": "SECTOR 04-A • CORE SANCTUARY",
+      "priorityScore": 32,
+      "tier": "low",
+      "statusLabel": "Healthy / Stable",
+      "ndviChange": "+2%",
+      "slope": "18°",
+      "runoff": "Stable",
+      "rainfallAnomaly": "+4%",
+      "forestCoverChange": "+1%",
+      "topsoilLossRate": "0.8 t/ha/yr",
+      "ndviDeltaText": "NDVI 0.76 → 0.78",
+      "recommendedActionTitle": "Continuous Canopy Monitoring",
+      "recommendedActionDesc": "Routine satellite telemetry pass and firebreak maintenance.",
+      "description": "Dense contiguous evergreen rainforest canopy maintaining optimal biomass equilibrium.",
+      "interventionType": "Canopy Protection",
+      "relativeX": 0.82,
+      "relativeY": 0.31,
+      "distanceKm": 45,
+      "beforeImageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuA5Yv5u3uunLvW66r0BBMXHuddswHnLzLabq2eslC_RSdJZVa3B6pTr5zG7XwTgkNvsVsBeopNgRTiC6ltDaulTgw-NWyzaWLTP1zuBxTclfd3kuoF3mg-3vHBdcG4iH7a9NtPxhoWpdIPlSXiKnt2-CORW10HL8JSZloTr8h7ldADqpKR8AVj59KqP_peRV3Lc8E3hBukMU0uhezPf2cghTgMdmnmD4OFlNLbuOEL92y_xM-LsNNJLyw",
+      "afterImageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuBit5tAUs2gYg_OHF_OR4A1w71wcGccVkwNa0RkXH2BFH8j5M5v9bdV7BBTDCazo-3wG8pLsCryxq9wVO2pfu2jX1Nbqu0UuNIk7y30lF0UQ7d2ilXogAb9fmtitN1lw-txzbwvn0dvNAACrJxKNPAuNsilR7348IMn4Mh3l94HypVx83PygFwKhk8ZQEC1AN-CS18mFaRLhpGMFOMG2je02nMnvG2qrqt2M5XdOOBkvcSDzjkET4Wz3g",
+      "scoreFactors": [
+        {
+          "name": "Canopy Density (NDVI)",
+          "value": "+2%",
+          "severity": "low",
+          "description": "Evergreen forest core exhibiting healthy multi-tier canopy closure."
+        }
+      ]
+    }
+  ],
+  "drives": [
+    {
+      "id": "restore-pune-hills",
+      "title": "Restore Pune Hills",
+      "locationName": "Sinhagad Ridge, Pune",
+      "sectorTag": "Sector 4B · Watershed",
+      "linkedAreaId": "mulshi-watershed",
+      "dateTime": "Sat, 28 Oct • 07:00 AM",
+      "dateBadge": "28 Oct",
+      "ngoName": "Western Ghats Ecological Trust",
+      "isNgoVerified": true,
+      "volunteersRegistered": 36,
+      "volunteersCapacity": 50,
+      "nativePlantsTarget": 500,
+      "priorityScore": 87,
+      "priorityLevel": "High",
+      "recommendedIntervention": "Contour bunding & indigenous ficus planting to stabilize degraded slopes.",
+      "description": "Field tools, sapling bundles, and geo-tagging monitors will be distributed upon check-in. Participants must assemble at designated slope coordinates for the mandatory briefing on native root depth calibration and soil moisture barriers.",
+      "meetingPoint": "Basecamp 2, Sinhagad Ghat Road",
+      "coordinates": "18.3664° N, 73.7558° E",
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuBHkscOaV0TQVfYKHRZKMAVFJq5OxB6Y55ZmxawvWuWC1-1TAaOE83rG96lP445TaCC8t2T4b31rcAsWxCP-QUoy7J9x5fT5fUuZhFchemW0fRM8Dp1XhA11cyrz-OHRYcEwyF1y8Ty5TJzUIANQ7Ej7X3Lf5EXKLLmKbt1M-xq8vz1lvgblbohsyTCrMDsTzPqsgw7il2ByqDczkQxE9ryzyWAINvmu-0sE-FlKbV-zSzWl3DpXUea6Q"
+    },
+    {
+      "id": "mulshi-watershed-contour",
+      "title": "Mulshi Watershed Contour Planting",
+      "locationName": "Mulshi Valley, Maharashtra",
+      "sectorTag": "Sector 18B · Catchment",
+      "linkedAreaId": "mulshi-watershed",
+      "dateTime": "Sun, 05 Nov • 06:30 AM",
+      "dateBadge": "05 Nov",
+      "ngoName": "Sahyadri Bio-Shield",
+      "isNgoVerified": true,
+      "volunteersRegistered": 42,
+      "volunteersCapacity": 60,
+      "nativePlantsTarget": 650,
+      "priorityScore": 87,
+      "priorityLevel": "High",
+      "recommendedIntervention": "Terraced contour trenches on red volcanic soil with native broadleaf seedlings.",
+      "description": "Comprehensive contour trenching and native tree planting session targeting critically eroded ridge paths. Heavy work equipment and safety boots provided.",
+      "meetingPoint": "Mulshi Dam Overlook Base, Gate 3",
+      "coordinates": "18.5022° N, 73.5147° E",
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuCXgqxz2NyYtP4uwu7R0ISK1OJuLyTgLXU8u0UFZmyqM05s8uP7mrfhNm0baiJdZIXj3hCMWIt5zG2BLHJ5TBeOz9QLnRsLb8l6X2bTtNcIJt87Kn_hfBrayx4EiSYUIsAHKtPOGGldCgWtkwxzbD78UJVsH4o92BoCMTVyucXfZx5w9YwKlnLGgHu_4MM0xrfmcMMZisn8HcdyV27n8gFmRF5VbNO3oG9_YBcPnkgtzzqXqjT08N2AAA"
+    },
+    {
+      "id": "tamhini-riparian-corridor",
+      "title": "Tamhini Riparian Corridor",
+      "locationName": "Tamhini Wildlife Sanctuary",
+      "sectorTag": "Sector 04A · Stream Bank",
+      "linkedAreaId": "tamhini-north",
+      "dateTime": "Sat, 11 Nov • 08:00 AM",
+      "dateBadge": "11 Nov",
+      "ngoName": "Clean Streams India",
+      "isNgoVerified": true,
+      "volunteersRegistered": 18,
+      "volunteersCapacity": 30,
+      "nativePlantsTarget": 300,
+      "priorityScore": 64,
+      "priorityLevel": "Medium",
+      "recommendedIntervention": "Riparian buffer restoration using coir root pouches and wetland riparian shrubs.",
+      "description": "Riverbank stabilization drive focusing on wetland plant species and erosion barriers along natural streams feeding Kundalika basin.",
+      "meetingPoint": "Tamhini Forest Checkpost, Trailhead 1",
+      "coordinates": "18.4520° N, 73.4215° E",
+      "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuBneKao5WJ_lO0dSX4eayD_M3PwkiVIOKjqUtQ4OgbCFJjGBmcmmQIuUWWU9DyJWNCwal8IctUb-2ta1RCco1nuoxSggF_Nnq5jwgtv03m8rcs_fVu8tjd4NxQmrCO7fuazAqMEQHaOl3nTe6WkHDCeAb5p61cUXvq4F_qTplyRSCDFGlGdoLluMWq9n6m_mqHLplB2rz_C04SUooG78M0Hteq1pEw62LiONmGZMLgxcL5hhcME2sPQ7g"
+    }
+  ],
+  "profiles": {
+    "volunteer": {
+      "id": "user-volunteer-1",
+      "email": "aditi.sharma@releaf.org",
+      "name": "Aditi Sharma",
+      "role": "volunteer",
+      "roleLabel": "Field Volunteer • Western Ghats Chapter",
+      "avatarUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuAbXpqa5m9gq4Os5CQq3NEHC8DKGBnfnyLtfoFWMeqJKRq3mS2R9T68YWnb87pMci22-z6KhVM_gqZwro4Tb5xRIuFYKaOfqBQdUehZnP-AzIjOkYsaClI7m9B8Vk_hSzykC9msuOfMsvuO-9EpAP5X9woZ9XTm1NHzJbY3WbainTXD2_ftuBCuxRzEepvYZPucLydNxA8kq0e4RsWyNoCuSV91QmzPfVTCn5BuCieJvSzci7vy5Y4mvA",
+      "chapter": "Western Ghats Chapter",
+      "drivesJoined": 12,
+      "plantsContributed": 84,
+      "volunteerHours": 18,
+      "canopyDelta": "+14%",
+      "canopySubtext": "Average vegetation recovery across drives you've joined",
+      "verificationBadge": "Sentinel-2 Surface Reflectance Verified",
+      "history": [
+        {
+          "title": "Sinhagad Ridge Reforestation",
+          "date": "14 Aug 2024",
+          "plants": 18,
+          "hours": 4
+        },
+        {
+          "title": "Mulshi Riparian Buffer Planting",
+          "date": "22 Jul 2024",
+          "plants": 24,
+          "hours": 5
+        },
+        {
+          "title": "Pashan Lake Wetland Re-wilding",
+          "date": "05 Jun 2024",
+          "plants": 12,
+          "hours": 3
+        }
+      ]
+    },
+    "ngo": {
+      "id": "user-ngo-1",
+      "email": "coordinator@wgetrust.org",
+      "name": "Vikram Kulkarni",
+      "role": "ngo",
+      "roleLabel": "Restoration Coordinator • Western Ghats Ecological Trust",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+      "chapter": "Western Ghats Ecological Trust",
+      "drivesJoined": 28,
+      "plantsContributed": 3400,
+      "volunteerHours": 140,
+      "canopyDelta": "+22%",
+      "canopySubtext": "Certified biomass gain across 6 monitored restoration parcels",
+      "verificationBadge": "Verified Restoration Partner • NGO Tier-1",
+      "history": [
+        {
+          "title": "Sinhagad Basin Native Planting",
+          "date": "10 Sep 2024",
+          "plants": 500,
+          "hours": 8
+        },
+        {
+          "title": "Mulshi Stream Catchment Stabilization",
+          "date": "18 Aug 2024",
+          "plants": 650,
+          "hours": 8
+        }
+      ]
+    }
+  },
+  "registrations": [
+    {
+      "id": "reg-1",
+      "driveId": "restore-pune-hills",
+      "userName": "Aditi Sharma",
+      "userRole": "Field Volunteer",
+      "status": "Checked In",
+      "registeredAt": "2026-10-01"
+    },
+    {
+      "id": "reg-2",
+      "driveId": "restore-pune-hills",
+      "userName": "Rahul Deshmukh",
+      "userRole": "Sapling Lead",
+      "status": "Checked In",
+      "registeredAt": "2026-10-02"
+    },
+    {
+      "id": "reg-3",
+      "driveId": "restore-pune-hills",
+      "userName": "Priya Patil",
+      "userRole": "Field Volunteer",
+      "status": "Pending",
+      "registeredAt": "2026-10-02"
+    },
+    {
+      "id": "reg-4",
+      "driveId": "restore-pune-hills",
+      "userName": "Amit Joshi",
+      "userRole": "Hydration Support",
+      "status": "Pending",
+      "registeredAt": "2026-10-03"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif-1",
+      "title": "Drive Reminder: Sinhagad Ridge",
+      "message": "Field restoration assembly starts tomorrow at 07:00 AM at Basecamp 2.",
+      "timeAgo": "2h ago",
+      "type": "drive",
+      "read": false
+    },
+    {
+      "id": "notif-2",
+      "title": "Sentinel-2 Telemetry Verified",
+      "message": "Sector 18-B registered +4.2% canopy index recovery following July planting.",
+      "timeAgo": "1d ago",
+      "type": "satellite",
+      "read": false
+    },
+    {
+      "id": "notif-3",
+      "title": "New Nearby Restoration Drive",
+      "message": "Tamhini Riparian Corridor drive published by Clean Streams India.",
+      "timeAgo": "3d ago",
+      "type": "drive",
+      "read": true
+    }
+  ],
+  "methodology": {
+    "title": "Biophysical Scoring & Satellite Telemetry Methodology",
+    "lastUpdated": "01 October 2026",
+    "calibrationVersion": "v4.8.1-sahyadri",
+    "sources": [
+      {
+        "name": "ESA Sentinel-2 Multi-Spectral Instrument (MSI)",
+        "resolution": "10-meter Ground Sampling Distance (GSD)",
+        "bands": "Band 4 (Red) & Band 8 (NIR) for Normalized Difference Vegetation Index (NDVI)",
+        "frequency": "5-day constellation revisit frequency"
+      },
+      {
+        "name": "NASA SRTM Digital Elevation Model",
+        "resolution": "30-meter spatial resolution",
+        "bands": "Topographic slope steepness & hydrology watershed basin catchments",
+        "frequency": "Static geomorphological baseline"
+      },
+      {
+        "name": "CHIRPS & IMD Rainfall Telemetry",
+        "resolution": "0.05° spatial resolution",
+        "bands": "Precipitation deficit relative to 30-year monsoon moving average",
+        "frequency": "Daily satellite precipitation estimates"
+      }
+    ],
+    "weights": [
+      {
+        "factor": "Canopy Density Loss (ΔNDVI)",
+        "percentage": 40,
+        "rationale": "Direct indicator of defoliation, timber felling, and shrub layer loss."
+      },
+      {
+        "factor": "Slope Incline & Runoff Risk",
+        "percentage": 25,
+        "rationale": "High angles exponentially increase velocity of monsoon sheetwash."
+      },
+      {
+        "factor": "Topsoil Erosion Rate",
+        "percentage": 20,
+        "rationale": "Rill and gully progression threatens downstream water storage capacity."
+      },
+      {
+        "factor": "Precipitation Deficit Anomaly",
+        "percentage": 15,
+        "rationale": "Moisture stress hampers natural regeneration without intervention."
+      }
+    ]
+  }
+}

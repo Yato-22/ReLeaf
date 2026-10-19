@@ -50,3 +50,6 @@ app.*.map.json
 env.json
 pipeline/.env.secret
 pipeline/.venv/
+*.env*
+.mcp/
+mcp.json

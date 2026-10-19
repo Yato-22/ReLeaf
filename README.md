@@ -84,16 +84,16 @@ Flutter app  →  Map view · Drive listings · Impact log
 | Data pipeline | Python + Google Earth Engine | 🔴 Not started |
 | Backend / DB | Supabase (Postgres, PostGIS, Auth, Storage) | 🔴 Not started |
 
-## Getting Started (Frontend Only)
+## Getting Started
 
 ```bash
 git clone https://github.com/Yato-22/ReLeaf.git
 cd ReLeaf
+cp env.example.json env.json
+# fill in your project URL and anon key in env.json
 flutter pub get
-flutter run
+flutter run --dart-define-from-file=env.json
 ```
-
-Since there is no backend yet, the app currently runs against sample/static data only.
 
 ## Roadmap
 

@@ -133,6 +133,16 @@ CREATE TRIGGER on_drives_updated
 
 -- 9. Row Level Security (RLS) Configuration
 
+-- 9.0 PostGIS spatial_ref_sys RLS (fixes "RLS Disabled in Public" Security Advisor warning)
+ALTER TABLE IF EXISTS public.spatial_ref_sys ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read on spatial_ref_sys" ON public.spatial_ref_sys;
+CREATE POLICY "Allow public read on spatial_ref_sys"
+  ON public.spatial_ref_sys
+  FOR SELECT
+  TO public
+  USING (true);
+
 -- 9.1 Areas RLS
 ALTER TABLE public.areas ENABLE ROW LEVEL SECURITY;
 
@@ -165,15 +175,15 @@ CREATE POLICY "Users can insert their own profile"
   ON public.profiles
   FOR INSERT
   TO authenticated
-  WITH CHECK (auth.uid() = id);
+  WITH CHECK ((select auth.uid()) = id);
 
 DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Users can update their own profile"
   ON public.profiles
   FOR UPDATE
   TO authenticated
-  USING (auth.uid() = id)
-  WITH CHECK (auth.uid() = id);
+  USING ((select auth.uid()) = id)
+  WITH CHECK ((select auth.uid()) = id);
 
 -- 9.3 Drives RLS
 ALTER TABLE public.drives ENABLE ROW LEVEL SECURITY;
@@ -191,10 +201,10 @@ CREATE POLICY "Only NGOs can insert drives"
   FOR INSERT
   TO authenticated
   WITH CHECK (
-    auth.uid() = organizer_id AND
+    (select auth.uid()) = organizer_id AND
     EXISTS (
       SELECT 1 FROM public.profiles
-      WHERE profiles.id = auth.uid() AND profiles.role = 'ngo'
+      WHERE profiles.id = (select auth.uid()) AND profiles.role = 'ngo'
     )
   );
 
@@ -203,15 +213,15 @@ CREATE POLICY "Organizers can update their own drives"
   ON public.drives
   FOR UPDATE
   TO authenticated
-  USING (auth.uid() = organizer_id)
-  WITH CHECK (auth.uid() = organizer_id);
+  USING ((select auth.uid()) = organizer_id)
+  WITH CHECK ((select auth.uid()) = organizer_id);
 
 DROP POLICY IF EXISTS "Organizers can delete their own drives" ON public.drives;
 CREATE POLICY "Organizers can delete their own drives"
   ON public.drives
   FOR DELETE
   TO authenticated
-  USING (auth.uid() = organizer_id);
+  USING ((select auth.uid()) = organizer_id);
 
 -- 9.4 Registrations RLS
 ALTER TABLE public.registrations ENABLE ROW LEVEL SECURITY;
@@ -222,10 +232,10 @@ CREATE POLICY "Users and organizers can read registrations"
   FOR SELECT
   TO authenticated
   USING (
-    auth.uid() = user_id OR
+    (select auth.uid()) = user_id OR
     EXISTS (
       SELECT 1 FROM public.drives
-      WHERE drives.id = registrations.drive_id AND drives.organizer_id = auth.uid()
+      WHERE drives.id = registrations.drive_id AND drives.organizer_id = (select auth.uid())
     )
   );
 
@@ -234,7 +244,7 @@ CREATE POLICY "Users can insert their own registration"
   ON public.registrations
   FOR INSERT
   TO authenticated
-  WITH CHECK (auth.uid() = user_id);
+  WITH CHECK ((select auth.uid()) = user_id);
 
 DROP POLICY IF EXISTS "Organizers can update registrations of their drives" ON public.registrations;
 CREATE POLICY "Organizers can update registrations of their drives"
@@ -244,13 +254,13 @@ CREATE POLICY "Organizers can update registrations of their drives"
   USING (
     EXISTS (
       SELECT 1 FROM public.drives
-      WHERE drives.id = registrations.drive_id AND drives.organizer_id = auth.uid()
+      WHERE drives.id = registrations.drive_id AND drives.organizer_id = (select auth.uid())
     )
   )
   WITH CHECK (
     EXISTS (
       SELECT 1 FROM public.drives
-      WHERE drives.id = registrations.drive_id AND drives.organizer_id = auth.uid()
+      WHERE drives.id = registrations.drive_id AND drives.organizer_id = (select auth.uid())
     )
   );
 
@@ -259,7 +269,7 @@ CREATE POLICY "Users can cancel their own registration"
   ON public.registrations
   FOR DELETE
   TO authenticated
-  USING (auth.uid() = user_id);
+  USING ((select auth.uid()) = user_id);
 
 -- 9.5 Impact Logs RLS
 ALTER TABLE public.impact_logs ENABLE ROW LEVEL SECURITY;
@@ -269,29 +279,29 @@ CREATE POLICY "Users can read own impact_logs"
   ON public.impact_logs
   FOR SELECT
   TO authenticated
-  USING (auth.uid() = user_id);
+  USING ((select auth.uid()) = user_id);
 
 DROP POLICY IF EXISTS "Users can insert own impact_logs" ON public.impact_logs;
 CREATE POLICY "Users can insert own impact_logs"
   ON public.impact_logs
   FOR INSERT
   TO authenticated
-  WITH CHECK (auth.uid() = user_id);
+  WITH CHECK ((select auth.uid()) = user_id);
 
 DROP POLICY IF EXISTS "Users can update own impact_logs" ON public.impact_logs;
 CREATE POLICY "Users can update own impact_logs"
   ON public.impact_logs
   FOR UPDATE
   TO authenticated
-  USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+  USING ((select auth.uid()) = user_id)
+  WITH CHECK ((select auth.uid()) = user_id);
 
 DROP POLICY IF EXISTS "Users can delete own impact_logs" ON public.impact_logs;
 CREATE POLICY "Users can delete own impact_logs"
   ON public.impact_logs
   FOR DELETE
   TO authenticated
-  USING (auth.uid() = user_id);
+  USING ((select auth.uid()) = user_id);
 
 -- 9.6 Notifications RLS
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
@@ -301,29 +311,29 @@ CREATE POLICY "Users can read own notifications"
   ON public.notifications
   FOR SELECT
   TO authenticated
-  USING (auth.uid() = user_id);
+  USING ((select auth.uid()) = user_id);
 
 DROP POLICY IF EXISTS "Users can insert own notifications" ON public.notifications;
 CREATE POLICY "Users can insert own notifications"
   ON public.notifications
   FOR INSERT
   TO authenticated
-  WITH CHECK (auth.uid() = user_id);
+  WITH CHECK ((select auth.uid()) = user_id);
 
 DROP POLICY IF EXISTS "Users can update own notifications" ON public.notifications;
 CREATE POLICY "Users can update own notifications"
   ON public.notifications
   FOR UPDATE
   TO authenticated
-  USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+  USING ((select auth.uid()) = user_id)
+  WITH CHECK ((select auth.uid()) = user_id);
 
 DROP POLICY IF EXISTS "Users can delete own notifications" ON public.notifications;
 CREATE POLICY "Users can delete own notifications"
   ON public.notifications
   FOR DELETE
   TO authenticated
-  USING (auth.uid() = user_id);
+  USING ((select auth.uid()) = user_id);
 
 -- 10. RPC: join_drive
 -- Safely joins a drive using row-level locking (FOR UPDATE) to prevent oversubscription
@@ -503,3 +513,4 @@ $$;
 
 REVOKE ALL ON FUNCTION public.get_areas_geojson(TEXT, TEXT) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.get_areas_geojson(TEXT, TEXT) TO authenticated, anon;
+
